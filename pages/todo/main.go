@@ -23,20 +23,30 @@ func main() {
 	updateStateCounts()
 
 	window.AddEventListenerFunc("click", func(event window.Event) {
-		if button := window.Element(event.Target()).Closest(".task-transition"); !button.IsNull() {
+		if button := event.TargetElement().Closest(".task-transition"); button.Truthy() {
 			handleTaskTransition(tmp, button)
 			updateStateCounts()
 		}
 
-		if button := window.Element(event.Target()).Closest("#append-new-task"); !button.IsNull() {
+		if button := event.TargetElement().Closest("#append-new-task"); button.Truthy() {
 			handleAppendTask(tmp, button)
 			updateStateCounts()
 		}
 	})
 
 	window.AddEventListenerFunc("change", func(event window.Event) {
-		if checkbox := window.Element(event.Target()).Closest(taskFilterCheckboxSelector); !checkbox.IsNull() {
+		if checkbox := event.TargetElement().Closest(taskFilterCheckboxSelector); checkbox.Truthy() {
 			handleToggleShowState(checkbox)
+		}
+	})
+
+	window.AddEventListenerFunc("keyup", func(event window.Event) {
+		if event.TargetElement().Matches("#new-title") {
+			if event.KeyCode() != window.KeyCodeEnter {
+				return
+			}
+			event.PreventDefault()
+			window.Document.QuerySelector("#append-new-task").Call("click")
 		}
 	})
 

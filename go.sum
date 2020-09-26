@@ -8,6 +8,10 @@ github.com/crhntr/window v0.0.0-20200926202619-e0aefa59e41f h1:OwGrzqnoa5d4b/2EU
 github.com/crhntr/window v0.0.0-20200926202619-e0aefa59e41f/go.mod h1:NxMT6kHuCQpdHS2yS/yAF+RBUJxoxNMFktr+bAkqdfo=
 github.com/crhntr/window v0.0.0-20200926203734-1a4a55fdb6c4 h1:AF/LsA5D0JcpvKSaC9YMJEdG9gaCWOs8Bol1qxu9OGc=
 github.com/crhntr/window v0.0.0-20200926203734-1a4a55fdb6c4/go.mod h1:NxMT6kHuCQpdHS2yS/yAF+RBUJxoxNMFktr+bAkqdfo=
+github.com/crhntr/window v0.0.0-20200926205837-86273298403b h1:EHkvYeH9fHIFUcMC7j1T1jFDfOgrfts0w8//k2JrcGc=
+github.com/crhntr/window v0.0.0-20200926205837-86273298403b/go.mod h1:NxMT6kHuCQpdHS2yS/yAF+RBUJxoxNMFktr+bAkqdfo=
+github.com/crhntr/window v0.0.0-20200926211157-62abdeae7e7c h1:fH3y6NbdADTzTUfepZPONQMS/bICuD1Bt7NRVD39CGs=
+github.com/crhntr/window v0.0.0-20200926211157-62abdeae7e7c/go.mod h1:NxMT6kHuCQpdHS2yS/yAF+RBUJxoxNMFktr+bAkqdfo=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

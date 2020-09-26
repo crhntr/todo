@@ -19,7 +19,7 @@ func main() {
 		return
 	}
 
-	loadTasks(tmp)
+	updateStateCounts()
 
 	window.AddEventListenerFunc("click", func(event window.Event) {
 		if button := window.Element(event.Target()).Closest(".task-transition"); !button.IsNull() {
@@ -141,29 +141,6 @@ func handleToggleShowState(checkbox window.Element) {
 const (
 	taskFilterCheckboxSelector = `.task-filter>input[type="checkbox"]`
 )
-
-func loadTasks(tmp *template.Template) {
-	tasks := make([]todo.Task, 0)
-
-	showState := checkedStates()
-
-	tasksEL := window.Document.QuerySelector(".tasks")
-	for _, task := range tasks {
-		taskEl, err := window.Document.NewElementFromTemplate(tmp, "task", task)
-		if err != nil {
-			fmt.Printf("failed to render task %s: %s", task.ID, err)
-			continue
-		}
-
-		if !showState[task.State] {
-			taskEl.Set("style", "display: none;")
-		}
-
-		tasksEL.AppendChild(taskEl)
-	}
-
-	updateStateCounts()
-}
 
 func taskFromElement(el window.Element) (todo.Task, error) {
 	if el.IsNull() {

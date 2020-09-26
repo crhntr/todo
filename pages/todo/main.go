@@ -77,7 +77,7 @@ func handleAppendTask(tmp *template.Template, button window.Element) {
 func handleTaskTransition(tmp *template.Template, button window.Element) {
 	taskEl := button.Closest(".task")
 
-	task, err := LoadTask(button.Closest(".task"))
+	task, err := taskFromElement(button.Closest(".task"))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -130,7 +130,7 @@ func handleToggleShowState(checkbox window.Element) {
 	checkedStates := checkedStates()
 
 	for _, taskEl := range window.Document.QuerySelectorAll(".task") {
-		task, err := LoadTask(taskEl)
+		task, err := taskFromElement(taskEl)
 		if err != nil {
 			continue
 		}
@@ -173,7 +173,7 @@ func loadTasks(tmp *template.Template) {
 	updateStateCounts()
 }
 
-func LoadTask(el window.Element) (todo.Task, error) {
+func taskFromElement(el window.Element) (todo.Task, error) {
 	if el.IsNull() {
 		return todo.Task{}, nil
 	}
@@ -223,7 +223,7 @@ func updateStateCounts() {
 	}
 
 	for _, taskEl := range window.Document.QuerySelectorAll(".task") {
-		task, err := LoadTask(taskEl)
+		task, err := taskFromElement(taskEl)
 		if err != nil {
 			continue
 		}

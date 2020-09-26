@@ -203,14 +203,13 @@
         {{ if .CanStart }}
             <button class="task-transition" data-state-transition="start">Start</button>
         {{ else if .CanFinish }}
+            {{ if .CanPutDown }}
+                <button class="task-transition" data-state-transition="put-down">Put Down</button>
+            {{end}}
             <button class="task-transition" data-state-transition="finish">Finish</button>
         {{ else if .CanReview }}
             <button class="task-transition" data-state-transition="review" data-review="pass">Looks Good</button>
             <button class="task-transition" data-state-transition="review" data-review="fail">Redo</button>
-        {{ end }}
-
-        {{if .CanPutDown }}
-            <button class="task-transition" data-state-transition="put-down">Put Down</button>
         {{ end }}
 
         {{if .CanDelete }}

@@ -24,10 +24,12 @@ func main() {
 	window.AddEventListenerFunc("click", func(event window.Event) {
 		if button := window.Element(event.Target()).Closest(".task-transition"); !button.IsNull() {
 			handleTaskTransition(tmp, button)
+			updateStateCounts()
 		}
 
 		if button := window.Element(event.Target()).Closest("#append-new-task"); !button.IsNull() {
 			handleAppendTask(tmp, button)
+			updateStateCounts()
 		}
 	})
 
@@ -110,8 +112,6 @@ func handleTaskTransition(tmp *template.Template, button window.Element) {
 	}
 
 	taskEl.Parent().ReplaceChild(newTaskEl, taskEl)
-
-	updateStateCounts()
 }
 
 func handleToggleShowState(checkbox window.Element) {
@@ -219,6 +219,7 @@ func updateStateCounts() {
 		todo.TaskStateActive: 0,
 		todo.TaskStateReview: 0,
 		todo.TaskStateDone:   0,
+		"all":                0,
 	}
 
 	for _, taskEl := range window.Document.QuerySelectorAll(".task") {
@@ -227,7 +228,8 @@ func updateStateCounts() {
 			continue
 		}
 
-		stateCounts[task.State] = stateCounts[task.State] + 1
+		stateCounts[task.State]++
+		stateCounts["all"]++
 	}
 
 	checkboxSelector := `.task-filter>input[type="checkbox"][name=%q]`
@@ -240,6 +242,10 @@ func updateStateCounts() {
 		}
 
 		label.Set("style", "display: block;")
+
+		if state == "all" {
+			continue
+		}
 
 		countEl := label.QuerySelector(".count")
 		countEl.SetInnerHTMLf("%d", count)

@@ -123,10 +123,7 @@
         {{else if .CanReview}}
             <button class="task-transition" data-state-transition="review" data-review="pass">Looks Good</button>
             <button class="task-transition" data-state-transition="review" data-review="fail">Redo</button>
-        {{else if .IsDone}}
-        {{else}}
-            <span class="error">Unknown Task State</span>
-        {{end}}
+        {{else if .IsDone}}{{end}}
     </div>
 </script>
 

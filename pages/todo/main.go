@@ -198,6 +198,14 @@ func updateStateCounts() {
 	for state, count := range stateCounts {
 		label := window.Document.QuerySelector(checkboxSelector+`+label`, state)
 
-		label.QuerySelector(".count").SetInnerHTMLf("%d", count)
+		if count == 0 {
+			label.Set("style", "display: none;")
+			continue
+		}
+
+		label.Set("style", "display: block;")
+
+		countEl := label.QuerySelector(".count")
+		countEl.SetInnerHTMLf("%d", count)
 	}
 }

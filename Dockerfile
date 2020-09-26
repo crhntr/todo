@@ -16,7 +16,7 @@ RUN mkdir -p bin assets/wasm assets/scripts
 COPY assets assets
 COPY pages pages
 COPY --from=todo-server /go/src/github.com/crhntr/todo/todo-server ./bin/todo-server
-COPY --from=todo-webapp /go/src/github.com/crhntr/todo/todo-webapp.wasm ./assets/wasm/todo-webapp.wasm
+COPY --from=todo-webapp /go/src/github.com/crhntr/todo/todo.wasm ./assets/wasm/todo.wasm
 COPY --from=todo-webapp /usr/local/go/misc/wasm/wasm_exec.js ./assets/scripts
 EXPOSE 80
 ENV PORT=80

@@ -43,6 +43,18 @@ func (state TaskState) Start() (TaskState, error) {
 	return TaskStateActive, nil
 }
 
+func (state TaskState) CanPutDown() bool {
+	return state == TaskStateActive
+}
+
+func (state TaskState) PutDown() (TaskState, error) {
+	if !state.CanPutDown() {
+		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "put down", state)
+	}
+
+	return TaskStateTODO, nil
+}
+
 func (state TaskState) CanFinish() bool {
 	switch state {
 	case TaskStateActive:

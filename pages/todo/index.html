@@ -209,6 +209,10 @@
             <button class="task-transition" data-state-transition="review" data-review="fail">Redo</button>
         {{ else if .IsDone }}{{ end }}
 
+        {{if .CanPutDown }}
+            <button class="task-transition" data-state-transition="put-down">Put Down</button>
+        {{ end }}
+
         {{if .CanDelete }}
             <button class="task-transition" data-state-transition="delete">Delete</button>
         {{ end }}

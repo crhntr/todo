@@ -90,7 +90,8 @@ func handleTaskTransition(tmp *template.Template, button window.Element) {
 		task.State, err = task.State.Start()
 	case "delete":
 		task.State, err = task.State.Delete()
-		taskEl.Remove()
+	case "put-down":
+		task.State, err = task.State.PutDown()
 	case "finish":
 		task.State, err = task.State.Finish()
 	case "review":

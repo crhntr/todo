@@ -29,6 +29,7 @@
 
         .tasks {
             max-width: 40rem;
+            min-width: 50rem;
 
             display: flex;
             flex-direction: column;
@@ -37,22 +38,31 @@
         .task {
             background-color: var(--container-bg-color);
             padding: .5rem;
-
-            min-width: 20rem;
             margin: .25rem 0;
+        }
+
+        .task input.title {
+            background: none;
+            border: none;
+            color: var(--main-text-color);
+            width: calc(100% - 1rem);
+            padding: .5rem;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
         }
 
         .task-filter {
             display: flex;
+            justify-content: flex-start;
         }
 
         .task-filter input[type="checkbox"] {
-            opacity: 0;
+            display: none;
         }
 
         .task-filter label {
             color: var(--main-text-color);
-            margin: .5rem;
+            margin: 0 .5rem .5rem 0rem;
             padding: .5rem;
             user-select: none;
             cursor: pointer;
@@ -115,7 +125,7 @@
 
 <script id="task" type="text/go-template">
     <div class="task" data-id="{{.ID.Hex}}" data-state="{{.State}}">
-        <input class="title" value="{{.Title}}"/>
+        <input class="title" value="{{.Title}}" placeholder="write a task title here..."/>
         {{template "state" .State}}
     </div>
 </script>

@@ -132,7 +132,7 @@
 
 <script id="task" type="text/go-template">
     <div class="task" data-id="{{.ID.Hex}}" data-state="{{.State}}">
-        <input class="title" value="{{.Title}}" placeholder="write a task title here..."/>
+        <input class="title" value="{{.Title}}" placeholder="write a task title here..." {{if .State.IsDone}}disabled{{end}}/>
         {{template "state" .State}}
     </div>
 </script>

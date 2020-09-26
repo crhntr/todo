@@ -15,7 +15,7 @@ type Task struct {
 type State string
 
 const (
-	TaskStateTODO    State = "todo"
+	TaskStateCreated State = "created"
 	TaskStateActive  State = "active"
 	TaskStateReview  State = "finished"
 	TaskStateDone    State = "done"
@@ -28,7 +28,7 @@ const (
 
 func (state State) CanStart() bool {
 	switch state {
-	case TaskStateTODO:
+	case TaskStateCreated:
 		return true
 	default:
 		return false
@@ -52,7 +52,7 @@ func (state State) PutDown() (State, error) {
 		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "put down", state)
 	}
 
-	return TaskStateTODO, nil
+	return TaskStateCreated, nil
 }
 
 func (state State) CanFinish() bool {
@@ -95,11 +95,11 @@ func (state State) Review(passed bool) (State, error) {
 		return TaskStateDone, nil
 	}
 
-	return TaskStateTODO, nil
+	return TaskStateCreated, nil
 }
 
 func (state State) CanDelete() bool {
-	return state == TaskStateTODO
+	return state == TaskStateCreated
 }
 
 func (state State) Delete() (State, error) {

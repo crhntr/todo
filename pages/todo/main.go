@@ -50,7 +50,7 @@ func handleAppendTask(tmp *template.Template, button window.Element) {
 	task := todo.Task{
 		ID:    primitive.NewObjectID(),
 		Title: input.Get("value").String(),
-		State: todo.TaskStateTODO,
+		State: todo.TaskStateCreated,
 	}
 
 	taskEl, err := window.Document.NewElementFromTemplate(tmp, "task", task)
@@ -217,11 +217,11 @@ func checkedStates() map[todo.State]bool {
 
 func updateStateCounts() {
 	stateCounts := map[todo.State]int{
-		todo.TaskStateTODO:   0,
-		todo.TaskStateActive: 0,
-		todo.TaskStateReview: 0,
-		todo.TaskStateDone:   0,
-		"all":                0,
+		todo.TaskStateCreated: 0,
+		todo.TaskStateActive:  0,
+		todo.TaskStateReview:  0,
+		todo.TaskStateDone:    0,
+		"all":                 0,
 	}
 
 	for _, taskEl := range window.Document.QuerySelectorAll(".task") {

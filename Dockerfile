@@ -18,6 +18,6 @@ COPY pages pages
 COPY --from=todo-server /go/src/github.com/crhntr/todo/todo-server ./bin/todo-server
 COPY --from=todo-webapp /go/src/github.com/crhntr/todo/todo-webapp.wasm ./assets/wasm/todo-webapp.wasm
 COPY --from=todo-webapp /usr/local/go/misc/wasm/wasm_exec.js ./assets/scripts
-EXPOSE 8080
-ENV PORT=8080
+EXPOSE 80
+ENV PORT=80
 ENTRYPOINT ["./bin/todo-server"]

@@ -47,6 +47,7 @@
             background-color: var(--container-bg-color);
             padding: .5rem;
             margin: .25rem 0;
+            cursor: move;
         }
 
         .task[data-state="todo"] {
@@ -128,6 +129,44 @@
         }
 
     </style>
+    <script>
+        let dragged, over;
+
+        document.addEventListener('dragstart', function (event) {
+            if (!event.target || !event.target.matches('.task')) { return }
+            dragged = event.target;
+        })
+
+        document.addEventListener('dragenter', function (event) {
+            if (!event.target || !event.target.matches('.task')) { return }
+            over = event.target;
+        })
+
+        document.addEventListener('dragend', function (event) {
+            if (!dragged || !over || !event.target || !event.target.matches('.task')) { return }
+
+            let d = dragged
+            dragged = null
+
+            let o = over
+            over = null
+
+            if (!o.nextElementSibling) {
+                o.parentElement.appendChild(d)
+                return
+            }
+
+            let dIndex = Array.prototype.indexOf.call(d.parentElement.children, d);
+            let oIndex = Array.prototype.indexOf.call(o.parentElement.children, o);
+
+            if (dIndex > oIndex) {
+                o.parentElement.insertBefore(d, o)
+                return
+            }
+
+            o.parentElement.insertBefore(d, o.nextElementSibling)
+        })
+    </script>
 </head>
 <body>
     <div class="page">
@@ -163,7 +202,7 @@
 </script>
 
 <script id="task" type="text/go-template">
-    <div class="task" data-id="{{.ID.Hex}}" data-state="{{.State}}">
+    <div class="task" data-id="{{.ID.Hex}}" data-state="{{.State}}" draggable="true">
         <input class="title" value="{{.Title}}" placeholder="write a task title here..." {{if .State.IsDone}}disabled{{end}}/>
         {{template "state" .State}}
     </div>

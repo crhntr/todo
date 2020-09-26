@@ -9,6 +9,9 @@
     <script>go_init('/assets/wasm/todo.wasm')</script>
 </head>
 <body>
-    Hello, world!
+    <div class="tasks"></div>
 </body>
+<script id="task" type="text/go-template">
+    <div>{{.Title}}</div>
+</script>
 </html>

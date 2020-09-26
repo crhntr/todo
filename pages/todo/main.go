@@ -77,7 +77,7 @@ func handleAppendTask(tmp *template.Template, button window.Element) {
 func handleTaskTransition(tmp *template.Template, button window.Element) {
 	taskEl := button.Closest(".task")
 
-	task, err := taskFromElement(button.Closest(".task"))
+	task, err := taskFromElement(taskEl)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -88,6 +88,9 @@ func handleTaskTransition(tmp *template.Template, button window.Element) {
 	switch stateTransition {
 	case "start":
 		task.State, err = task.State.Start()
+	case "delete":
+		task.State, err = task.State.Delete()
+		taskEl.Remove()
 	case "finish":
 		task.State, err = task.State.Finish()
 	case "review":

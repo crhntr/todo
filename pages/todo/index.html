@@ -200,14 +200,18 @@
 
 <script id="state" type="text/go-template">
     <div class="state">
-        {{if .CanStart }}
+        {{ if .CanStart }}
             <button class="task-transition" data-state-transition="start">Start</button>
-        {{else if .CanFinish }}
+        {{ else if .CanFinish }}
             <button class="task-transition" data-state-transition="finish">Finish</button>
-        {{else if .CanReview}}
+        {{ else if .CanReview }}
             <button class="task-transition" data-state-transition="review" data-review="pass">Looks Good</button>
             <button class="task-transition" data-state-transition="review" data-review="fail">Redo</button>
-        {{else if .IsDone}}{{end}}
+        {{ else if .IsDone }}{{ end }}
+
+        {{if .CanDelete }}
+            <button class="task-transition" data-state-transition="delete">Delete</button>
+        {{ end }}
     </div>
 </script>
 

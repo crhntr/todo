@@ -15,10 +15,11 @@ type Task struct {
 type TaskState string
 
 const (
-	TaskStateTODO   TaskState = "todo"
-	TaskStateActive TaskState = "active"
-	TaskStateReview TaskState = "finished"
-	TaskStateDone   TaskState = "done"
+	TaskStateTODO    TaskState = "todo"
+	TaskStateActive  TaskState = "active"
+	TaskStateReview  TaskState = "finished"
+	TaskStateDone    TaskState = "done"
+	TaskStateDeleted TaskState = "deleted"
 )
 
 const (
@@ -83,4 +84,16 @@ func (state TaskState) Review(passed bool) (TaskState, error) {
 	}
 
 	return TaskStateTODO, nil
+}
+
+func (state TaskState) CanDelete() bool {
+	return state == TaskStateTODO
+}
+
+func (state TaskState) Delete() (TaskState, error) {
+	if !state.CanDelete() {
+		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "delete", state)
+	}
+
+	return TaskStateDeleted, nil
 }

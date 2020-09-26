@@ -29,7 +29,7 @@ func main() {
 
 	window.AddEventListenerFunc("change", func(event window.Event) {
 		if checkbox := window.Element(event.Target()).Closest(taskFilterCheckboxSelector); !checkbox.IsNull() {
-			handleToggleShowState()
+			handleToggleShowState(checkbox)
 		}
 	})
 
@@ -69,7 +69,7 @@ func handleTaskTransition(tmp *template.Template, button window.Element) {
 		return
 	}
 
-	if !TaskFilter()(task) {
+	if !checkedStates()[task.State] {
 		newTaskEl.Set("style", "display: none;")
 	}
 
@@ -78,8 +78,20 @@ func handleTaskTransition(tmp *template.Template, button window.Element) {
 	updateStateCounts()
 }
 
-func handleToggleShowState() {
-	show := TaskFilter()
+func handleToggleShowState(checkbox window.Element) {
+	if checkbox.Attribute("id") == "all" && !checkbox.Get("checked").Truthy() {
+		for _, c := range window.Document.QuerySelectorAll(taskFilterCheckboxSelector) {
+			switch c.Attribute("name") {
+			case "all":
+			case "todo":
+				c.Set("checked", true)
+			default:
+				c.Set("checked", false)
+			}
+		}
+	}
+
+	checkedStates := checkedStates()
 
 	for _, taskEl := range window.Document.QuerySelectorAll(".task") {
 		task, err := LoadTask(taskEl)
@@ -87,7 +99,7 @@ func handleToggleShowState() {
 			continue
 		}
 
-		if !show(task) {
+		if !checkedStates[task.State] {
 			taskEl.Set("style", "display: none;")
 			continue
 		}
@@ -121,7 +133,7 @@ func loadTasks(tmp *template.Template) {
 		},
 	}
 
-	show := TaskFilter()
+	showState := checkedStates()
 
 	tasksEL := window.Document.QuerySelector(".tasks")
 	for _, task := range tasks {
@@ -131,7 +143,7 @@ func loadTasks(tmp *template.Template) {
 			continue
 		}
 
-		if !show(task) {
+		if !showState[task.State] {
 			taskEl.Set("style", "display: none;")
 		}
 
@@ -160,21 +172,25 @@ func LoadTask(el window.Element) (todo.Task, error) {
 	return task, nil
 }
 
-func TaskFilter() func(task todo.Task) bool {
+func checkedStates() map[todo.TaskState]bool {
 	checkboxes := window.Document.QuerySelectorAll(taskFilterCheckboxSelector)
 
-	showStates := make(map[todo.TaskState]struct{})
+	states := make(map[todo.TaskState]bool, len(checkboxes))
 
 	for _, checkbox := range checkboxes {
-		if checkbox.Get("checked").Truthy() {
-			showStates[todo.TaskState(checkbox.Attribute("name"))] = struct{}{}
+		states[todo.TaskState(checkbox.Attribute("name"))] = checkbox.Get("checked").Truthy()
+	}
+
+	if states["all"] {
+		for s := range states {
+			states[s] = true
+		}
+		for _, c := range checkboxes {
+			c.Set("checked", true)
 		}
 	}
 
-	return func(task todo.Task) bool {
-		_, ok := showStates[task.State]
-		return ok
-	}
+	return states
 }
 
 func updateStateCounts() {

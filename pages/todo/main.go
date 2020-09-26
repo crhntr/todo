@@ -83,9 +83,7 @@ func handleTaskTransition(tmp *template.Template, button window.Element) {
 		return
 	}
 
-	stateTransition := button.Attribute("data-state-transition")
-
-	switch stateTransition {
+	switch button.Attribute("data-state-transition") {
 	case "start":
 		task.State, err = task.State.Start()
 	case "delete":

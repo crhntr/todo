@@ -207,7 +207,7 @@
         {{ else if .CanReview }}
             <button class="task-transition" data-state-transition="review" data-review="pass">Looks Good</button>
             <button class="task-transition" data-state-transition="review" data-review="fail">Redo</button>
-        {{ else if .IsDone }}{{ end }}
+        {{ end }}
 
         {{if .CanPutDown }}
             <button class="task-transition" data-state-transition="put-down">Put Down</button>

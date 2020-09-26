@@ -7,11 +7,117 @@
     <script src="/assets/scripts/wasm_exec.js" type="application/javascript"></script>
     <script src="/assets/scripts/go_init.js" type="application/javascript"></script>
     <script>go_init('/assets/wasm/todo.wasm')</script>
+    <style>
+        :root {
+            --main-bg-color: hsla(206, 9%, 7%, 1.0);
+            --container-bg-color: hsla(200, 9%, 2%, 1.0);
+            --main-text-color: hsla(220, 12%, 81%, 1.0);
+        }
+
+
+        html, body {
+            background-color: var(--main-bg-color);
+            color: var(--main-text-color);
+
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .page {
+            display: flex;
+            justify-content: center;
+        }
+
+        .tasks {
+            max-width: 40rem;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        .task {
+            background-color: var(--container-bg-color);
+            padding: .5rem;
+
+            min-width: 20rem;
+            margin: .25rem 0;
+        }
+
+        .task-filter {
+            display: flex;
+        }
+
+        .task-filter input[type="checkbox"] {
+            opacity: 0;
+        }
+
+        .task-filter label {
+            color: var(--main-text-color);
+            margin: .5rem;
+            padding: .5rem;
+            user-select: none;
+            cursor: pointer;
+        }
+        .task-filter label .count {
+            margin-left: .5rem;
+        }
+        .task-filter input[type="checkbox"]:checked + label {
+            background: var(--container-bg-color);
+        }
+
+        .noselect {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+        }
+
+    </style>
 </head>
 <body>
-    <div class="tasks"></div>
+    <div class="page">
+        <div>
+            <h1>TODO</h1>
+            <div class="task-filter noselect">
+                <input type="checkbox" id="todo" name="todo" checked>
+                <label for="todo">Todo<span class="count"></span></label>
+                <input type="checkbox" id="active" name="active" checked>
+                <label for="active">Active<span class="count"></span></label>
+                <input type="checkbox" id="finished" name="finished">
+                <label for="finished">Review<span class="count"></span></label>
+                <input type="checkbox" id="done" name="done">
+                <label for="done">Done<span class="count"></span></label>
+            </div>
+            <div class="tasks"></div>
+        </div>
+    </div>
+
 </body>
-<script id="task" type="text/go-template">
-    <div>{{.Title}}</div>
+
+<script id="state" type="text/go-template">
+    <div class="state">
+        {{if .CanStart }}
+            <button class="task-transition" data-state-transition="start">Start</button>
+        {{else if .CanFinish }}
+            <button class="task-transition" data-state-transition="finish">Finish</button>
+        {{else if .CanReview}}
+            <button class="task-transition" data-state-transition="review" data-review="pass">Looks Good</button>
+            <button class="task-transition" data-state-transition="review" data-review="fail">Redo</button>
+        {{else if .IsDone}}
+            <span>Done</span>
+        {{else}}
+            <span class="error">Unknown Task State</span>
+        {{end}}
+    </div>
 </script>
+
+<script id="task" type="text/go-template">
+    <div class="task" data-id="{{.ID.Hex}}" data-state="{{.State}}">
+        <input class="title" value="{{.Title}}"/>
+        {{template "state" .State}}
+    </div>
+</script>
+
 </html>

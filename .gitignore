@@ -1,1 +1,3 @@
 .idea
+assets/wasm/*.wasm
+!assets/wasm/.gitkeep

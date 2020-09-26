@@ -15,43 +15,72 @@ type Task struct {
 type TaskState string
 
 const (
-	TaskStateTODO      TaskState = "todo"
-	TaskStateActive    TaskState = "active"
-	TaskStateCompleted TaskState = "completed"
-	TaskStateDone      TaskState = "done"
-	TaskStateRedo      TaskState = "redo"
+	TaskStateTODO   TaskState = "todo"
+	TaskStateActive TaskState = "active"
+	TaskStateReview TaskState = "finished"
+	TaskStateDone   TaskState = "done"
 )
 
 const (
 	errTaskStateTransitionFailedFormat = "task transition %s failed because the current task state is %s"
 )
 
-func (state TaskState) Start() (TaskState, error) {
+func (state TaskState) CanStart() bool {
 	switch state {
-	case TaskStateTODO, TaskStateRedo:
-		return TaskStateActive, nil
+	case TaskStateTODO:
+		return true
 	default:
+		return false
+	}
+}
+
+func (state TaskState) Start() (TaskState, error) {
+	if !state.CanStart() {
 		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "start", state)
+	}
+
+	return TaskStateActive, nil
+}
+
+func (state TaskState) CanFinish() bool {
+	switch state {
+	case TaskStateActive:
+		return true
+	default:
+		return false
 	}
 }
 
 func (state TaskState) Finish() (TaskState, error) {
-	switch state {
-	case TaskStateActive:
-		return TaskStateCompleted, nil
-	default:
+	if !state.CanFinish() {
 		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "finish", state)
+	}
+
+	return TaskStateReview, nil
+}
+
+func (state TaskState) CanReview() bool {
+	switch state {
+	case TaskStateReview:
+		return true
+	default:
+
+		return false
 	}
 }
 
+func (state TaskState) IsDone() bool {
+	return state == TaskStateDone
+}
+
 func (state TaskState) Review(passed bool) (TaskState, error) {
-	switch state {
-	case TaskStateCompleted:
-		if passed {
-			return TaskStateDone, nil
-		}
-		return TaskStateRedo, nil
-	default:
+	if !state.CanReview() {
 		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "review", state)
 	}
+
+	if passed {
+		return TaskStateDone, nil
+	}
+
+	return TaskStateTODO, nil
 }

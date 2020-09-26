@@ -25,6 +25,10 @@ func main() {
 		if button := window.Element(event.Target()).Closest(".task-transition"); !button.IsNull() {
 			handleTaskTransition(tmp, button)
 		}
+
+		if button := window.Element(event.Target()).Closest("#append-new-task"); !button.IsNull() {
+			handleAppendTask(tmp, button)
+		}
 	})
 
 	window.AddEventListenerFunc("change", func(event window.Event) {
@@ -34,6 +38,38 @@ func main() {
 	})
 
 	select {}
+}
+
+func handleAppendTask(tmp *template.Template, button window.Element) {
+	input := button.Closest(".new-task").QuerySelector("input#new-title")
+
+	tasksEl := window.Document.QuerySelector(".tasks")
+
+	task := todo.Task{
+		ID:    primitive.NewObjectID(),
+		Title: input.Get("value").String(),
+		State: todo.TaskStateTODO,
+	}
+
+	taskEl, err := window.Document.NewElementFromTemplate(tmp, "task", task)
+	if err != nil {
+		fmt.Printf("failed to render task %s: %s", task.ID, err)
+		return
+	}
+
+	input.Set("value", "")
+
+	if tasksEl.ChildCount() == 0 {
+		window.Document.QuerySelector(taskFilterCheckboxSelector+"[name=todo]").Set("checked", true)
+	}
+
+	showState := checkedStates()
+
+	if !showState[task.State] {
+		taskEl.Set("style", "display: none;")
+	}
+
+	tasksEl.AppendChild(taskEl)
 }
 
 func handleTaskTransition(tmp *template.Template, button window.Element) {
@@ -115,23 +151,7 @@ const (
 )
 
 func loadTasks(tmp *template.Template) {
-	tasks := []todo.Task{
-		{
-			ID:    primitive.NewObjectID(),
-			Title: "Task 1",
-			State: todo.TaskStateTODO,
-		},
-		{
-			ID:    primitive.NewObjectID(),
-			Title: "Task 2",
-			State: todo.TaskStateTODO,
-		},
-		{
-			ID:    primitive.NewObjectID(),
-			Title: "Task 3",
-			State: todo.TaskStateTODO,
-		},
-	}
+	tasks := make([]todo.Task, 0)
 
 	showState := checkedStates()
 

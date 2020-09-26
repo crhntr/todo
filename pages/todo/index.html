@@ -43,10 +43,13 @@
             flex-direction: column;
         }
 
-        .task {
+        .container, .task {
             background-color: var(--container-bg-color);
             padding: .5rem;
             margin: .25rem 0;
+        }
+
+        .task {
             cursor: move;
         }
 
@@ -76,7 +79,7 @@
             color: var(--done-color);
         }
 
-        .task input.title {
+        .task input.title, input#new-title {
             background: none;
             border: none;
             color: var(--main-text-color);
@@ -184,6 +187,11 @@
                 <label for="done">Done<span class="count"></span></label>
             </div>
             <div class="tasks"></div>
+            <div class="new-task container">
+                <input id="new-title" placeholder="write a new task title here"/>
+                <label for="new-title" style="display: none;">New task title</label>
+                <button id="append-new-task">Append New Task</button>
+            </div>
         </div>
     </div>
 
@@ -204,7 +212,7 @@
 
 <script id="task" type="text/go-template">
     <div class="task" data-id="{{.ID.Hex}}" data-state="{{.State}}" draggable="true">
-        <input class="title" value="{{.Title}}" placeholder="write a task title here..." {{if .State.IsDone}}disabled{{end}}/>
+        <input class="title" value="{{.Title}}" placeholder="write a task title here" {{if .State.IsDone}}disabled{{end}}/>
         {{template "state" .State}}
     </div>
 </script>

@@ -12,6 +12,14 @@
             --main-bg-color: hsla(206, 9%, 7%, 1.0);
             --container-bg-color: hsla(200, 9%, 2%, 1.0);
             --main-text-color: hsla(220, 12%, 81%, 1.0);
+            --warning-color: #ee6c4d;
+
+            --todo-color: #3d5a80;
+            --active-color: #98a886;
+            --finished-color: #e9d985;
+            --done-color: #93827f;
+
+            --no-color: hsla(0, 0%, 0%, 0);
         }
 
 
@@ -41,6 +49,32 @@
             margin: .25rem 0;
         }
 
+        .task[data-state="todo"] {
+            border-left: .5rem solid var(--todo-color);
+        }
+        .task[data-state="active"] {
+            border-left: .5rem solid var(--active-color);
+        }
+        .task[data-state="finished"] {
+            border-left: .5rem solid var(--finished-color);
+        }
+        .task[data-state="done"] {
+            border-left: .5rem solid var(--done-color);
+        }
+
+        .task-filter label[for="todo"] {
+            color: var(--todo-color);
+        }
+        .task-filter label[for="active"] {
+            color: var(--active-color);
+        }
+        .task-filter label[for="finished"] {
+            color: var(--finished-color);
+        }
+        .task-filter label[for="done"] {
+            color: var(--done-color);
+        }
+
         .task input.title {
             background: none;
             border: none;
@@ -66,12 +100,13 @@
             padding: .5rem;
             user-select: none;
             cursor: pointer;
+            border-bottom: .2rem solid var(--no-color);
         }
         .task-filter label .count {
             margin-left: .5rem;
         }
         .task-filter input[type="checkbox"]:checked + label {
-            background: var(--container-bg-color);
+            border-bottom: .2rem solid var(--container-bg-color);
         }
 
         .noselect {

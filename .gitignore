@@ -1,3 +1,4 @@
 .idea
+assets/scripts/wasm_exec.js
 assets/wasm/*.wasm
 !assets/wasm/.gitkeep

@@ -10,7 +10,7 @@ RUN apk --no-cache add ca-certificates
 RUN mkdir -p bin assets/wasm assets/scripts
 COPY assets assets
 COPY pages pages
-COPY --from=todo-server /go/src/github.com/crhntr/todo/todo-server ./bin/todo-server
+COPY --from=build /go/src/github.com/crhntr/todo/todo-server ./bin/todo-server
 COPY --from=build /go/src/github.com/crhntr/todo/todo.wasm ./assets/wasm/todo.wasm
 COPY --from=build /usr/local/go/misc/wasm/wasm_exec.js ./assets/scripts
 EXPOSE 80

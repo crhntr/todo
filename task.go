@@ -2,11 +2,14 @@ package todo
 
 import (
 	"fmt"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Task struct {
-	Title string    `json:"task"`
-	State TaskState `json:"state"`
+	ID    primitive.ObjectID `json:"id"`
+	Title string             `json:"task"`
+	State TaskState          `json:"state"`
 }
 
 type TaskState string

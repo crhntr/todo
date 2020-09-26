@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"syscall/js"
 
 	"github.com/crhntr/window"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -39,7 +40,70 @@ func main() {
 		}
 	})
 
-	select {}
+	handleTaskDragEvents()
+}
+
+func handleTaskDragEvents() {
+	var (
+		dragStart = make(chan window.Event)
+		dragEnter = make(chan window.Event)
+		dragEnd   = make(chan window.Event)
+
+		taskBeingDragged, taskDraggedOver window.Element
+	)
+
+	window.AddEventListenerChannel("dragstart", dragStart)
+	window.AddEventListenerChannel("dragenter", dragEnter)
+	window.AddEventListenerChannel("dragend", dragEnd)
+
+	for {
+		select {
+		case event := <-dragStart:
+
+			if !event.Target().Truthy() {
+				continue
+			}
+
+			el := window.Element(event.Target()).Closest(".task")
+			if !el.Truthy() {
+				continue
+			}
+
+			taskBeingDragged = el
+
+		case event := <-dragEnter:
+
+			if !event.Target().Truthy() {
+				continue
+			}
+
+			el := window.Element(event.Target()).Closest(".task")
+			if !el.Truthy() {
+				continue
+			}
+
+			taskDraggedOver = el
+
+		case event := <-dragEnd:
+
+			if !event.Target().Truthy() ||
+				!taskBeingDragged.Truthy() ||
+				!taskDraggedOver.Truthy() {
+				continue
+			}
+
+			d, o := taskBeingDragged, taskDraggedOver
+			taskDraggedOver = window.Element(js.Null())
+			taskDraggedOver = window.Element(js.Null())
+
+			if d.Parent().IndexOf(d) > o.Parent().IndexOf(o) {
+				o.InsertBefore(d)
+				continue
+			}
+
+			o.InsertAfter(d)
+		}
+	}
 }
 
 func handleAppendTask(tmp *template.Template, button window.Element) {

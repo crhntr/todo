@@ -61,16 +61,6 @@ func handleAppendTask(tmp *template.Template, button window.Element) {
 
 	input.Set("value", "")
 
-	if tasksEl.ChildCount() == 0 {
-		window.Document.QuerySelector(taskFilterCheckboxSelector+"[name=todo]").Set("checked", true)
-	}
-
-	showState := checkedStates()
-
-	if !showState[task.State] {
-		taskEl.Set("style", "display: none;")
-	}
-
 	tasksEl.AppendChild(taskEl)
 }
 
@@ -121,7 +111,7 @@ func handleToggleShowState(checkbox window.Element) {
 		for _, c := range window.Document.QuerySelectorAll(taskFilterCheckboxSelector) {
 			switch c.Attribute("name") {
 			case "all":
-			case "todo":
+			case "created":
 				c.Set("checked", true)
 			default:
 				c.Set("checked", false)
@@ -249,7 +239,8 @@ func updateStateCounts() {
 			continue
 		}
 
-		countEl := label.QuerySelector(".count")
-		countEl.SetInnerHTMLf("%d", count)
+		if countEl := label.QuerySelector(".count"); countEl.Truthy() {
+			countEl.SetInnerHTMLf("%d", count)
+		}
 	}
 }

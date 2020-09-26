@@ -14,7 +14,7 @@
             --main-text-color: hsla(220, 12%, 81%, 1.0);
             --warning-color: #ee6c4d;
 
-            --todo-color: #3d5a80;
+            --created-color: #3d5a80;
             --active-color: #98a886;
             --finished-color: #e9d985;
             --done-color: #93827f;
@@ -53,8 +53,8 @@
             cursor: move;
         }
 
-        .task[data-state="todo"] {
-            border-left: 1.5rem solid var(--todo-color);
+        .task[data-state="created"] {
+            border-left: 1.5rem solid var(--created-color);
         }
         .task[data-state="active"] {
             border-left: 1.5rem solid var(--active-color);
@@ -66,8 +66,8 @@
             border-left: 1.5rem solid var(--done-color);
         }
 
-        .task-filter label[for="todo"] {
-            color: var(--todo-color);
+        .task-filter label[for="created"] {
+            color: var(--created-color);
         }
         .task-filter label[for="active"] {
             color: var(--active-color);
@@ -178,8 +178,8 @@
             <div class="task-filter noselect">
                 <input type="checkbox" id="all" name="all">
                 <label for="all">All</label>
-                <input type="checkbox" id="todo" name="todo" checked>
-                <label for="todo">Todo<span class="count"></span></label>
+                <input type="checkbox" id="created" name="created" checked>
+                <label for="created">Created<span class="count"></span></label>
                 <input type="checkbox" id="active" name="active" checked>
                 <label for="active">Active<span class="count"></span></label>
                 <input type="checkbox" id="finished" name="finished">

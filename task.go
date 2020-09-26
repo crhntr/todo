@@ -15,11 +15,11 @@ type Task struct {
 type TaskState string
 
 const (
-	TaskStateTODO       TaskState = "todo"
-	TaskStateInProgress TaskState = "in_progress"
-	TaskStateCompleted  TaskState = "completed"
-	TaskStateDone       TaskState = "done"
-	TaskStateRedo       TaskState = "redo"
+	TaskStateTODO      TaskState = "todo"
+	TaskStateActive    TaskState = "active"
+	TaskStateCompleted TaskState = "completed"
+	TaskStateDone      TaskState = "done"
+	TaskStateRedo      TaskState = "redo"
 )
 
 const (
@@ -29,7 +29,7 @@ const (
 func (state TaskState) Start() (TaskState, error) {
 	switch state {
 	case TaskStateTODO, TaskStateRedo:
-		return TaskStateInProgress, nil
+		return TaskStateActive, nil
 	default:
 		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "start", state)
 	}
@@ -37,7 +37,7 @@ func (state TaskState) Start() (TaskState, error) {
 
 func (state TaskState) Finish() (TaskState, error) {
 	switch state {
-	case TaskStateInProgress:
+	case TaskStateActive:
 		return TaskStateCompleted, nil
 	default:
 		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "finish", state)

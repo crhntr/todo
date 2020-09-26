@@ -9,24 +9,24 @@ import (
 type Task struct {
 	ID    primitive.ObjectID `json:"id"`
 	Title string             `json:"task"`
-	State TaskState          `json:"state"`
+	State `json:"state"`
 }
 
-type TaskState string
+type State string
 
 const (
-	TaskStateTODO    TaskState = "todo"
-	TaskStateActive  TaskState = "active"
-	TaskStateReview  TaskState = "finished"
-	TaskStateDone    TaskState = "done"
-	TaskStateDeleted TaskState = "deleted"
+	TaskStateTODO    State = "todo"
+	TaskStateActive  State = "active"
+	TaskStateReview  State = "finished"
+	TaskStateDone    State = "done"
+	TaskStateDeleted State = "deleted"
 )
 
 const (
 	errTaskStateTransitionFailedFormat = "task transition %s failed because the current task state is %s"
 )
 
-func (state TaskState) CanStart() bool {
+func (state State) CanStart() bool {
 	switch state {
 	case TaskStateTODO:
 		return true
@@ -35,7 +35,7 @@ func (state TaskState) CanStart() bool {
 	}
 }
 
-func (state TaskState) Start() (TaskState, error) {
+func (state State) Start() (State, error) {
 	if !state.CanStart() {
 		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "start", state)
 	}
@@ -43,11 +43,11 @@ func (state TaskState) Start() (TaskState, error) {
 	return TaskStateActive, nil
 }
 
-func (state TaskState) CanPutDown() bool {
+func (state State) CanPutDown() bool {
 	return state == TaskStateActive
 }
 
-func (state TaskState) PutDown() (TaskState, error) {
+func (state State) PutDown() (State, error) {
 	if !state.CanPutDown() {
 		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "put down", state)
 	}
@@ -55,7 +55,7 @@ func (state TaskState) PutDown() (TaskState, error) {
 	return TaskStateTODO, nil
 }
 
-func (state TaskState) CanFinish() bool {
+func (state State) CanFinish() bool {
 	switch state {
 	case TaskStateActive:
 		return true
@@ -64,7 +64,7 @@ func (state TaskState) CanFinish() bool {
 	}
 }
 
-func (state TaskState) Finish() (TaskState, error) {
+func (state State) Finish() (State, error) {
 	if !state.CanFinish() {
 		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "finish", state)
 	}
@@ -72,7 +72,7 @@ func (state TaskState) Finish() (TaskState, error) {
 	return TaskStateReview, nil
 }
 
-func (state TaskState) CanReview() bool {
+func (state State) CanReview() bool {
 	switch state {
 	case TaskStateReview:
 		return true
@@ -82,11 +82,11 @@ func (state TaskState) CanReview() bool {
 	}
 }
 
-func (state TaskState) IsDone() bool {
+func (state State) IsDone() bool {
 	return state == TaskStateDone
 }
 
-func (state TaskState) Review(passed bool) (TaskState, error) {
+func (state State) Review(passed bool) (State, error) {
 	if !state.CanReview() {
 		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "review", state)
 	}
@@ -98,11 +98,11 @@ func (state TaskState) Review(passed bool) (TaskState, error) {
 	return TaskStateTODO, nil
 }
 
-func (state TaskState) CanDelete() bool {
+func (state State) CanDelete() bool {
 	return state == TaskStateTODO
 }
 
-func (state TaskState) Delete() (TaskState, error) {
+func (state State) Delete() (State, error) {
 	if !state.CanDelete() {
 		return "", fmt.Errorf(errTaskStateTransitionFailedFormat, "delete", state)
 	}

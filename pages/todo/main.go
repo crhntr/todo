@@ -187,20 +187,20 @@ func taskFromElement(el window.Element) (todo.Task, error) {
 
 	task := todo.Task{
 		ID:    taskID,
-		State: todo.TaskState(el.Attribute("data-state")),
+		State: todo.State(el.Attribute("data-state")),
 		Title: el.QuerySelector(".title").Get("value").String(),
 	}
 
 	return task, nil
 }
 
-func checkedStates() map[todo.TaskState]bool {
+func checkedStates() map[todo.State]bool {
 	checkboxes := window.Document.QuerySelectorAll(taskFilterCheckboxSelector)
 
-	states := make(map[todo.TaskState]bool, len(checkboxes))
+	states := make(map[todo.State]bool, len(checkboxes))
 
 	for _, checkbox := range checkboxes {
-		states[todo.TaskState(checkbox.Attribute("name"))] = checkbox.Get("checked").Truthy()
+		states[todo.State(checkbox.Attribute("name"))] = checkbox.Get("checked").Truthy()
 	}
 
 	if states["all"] {
@@ -216,7 +216,7 @@ func checkedStates() map[todo.TaskState]bool {
 }
 
 func updateStateCounts() {
-	stateCounts := map[todo.TaskState]int{
+	stateCounts := map[todo.State]int{
 		todo.TaskStateTODO:   0,
 		todo.TaskStateActive: 0,
 		todo.TaskStateReview: 0,

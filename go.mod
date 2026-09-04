@@ -11,5 +11,6 @@ require (
 
 require (
 	github.com/cyphar/filepath-securejoin v0.6.1 // indirect
-	golang.org/x/sys v0.46.0 // indirect
+	golang.org/x/net v0.58.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
 )
